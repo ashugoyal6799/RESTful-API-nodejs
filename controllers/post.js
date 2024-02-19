@@ -51,7 +51,16 @@ exports.createPost = async(req,res,next) => {
 // To get all the posts 
 exports.getAllPosts = async(req,res,next) => {
     try{
-        const posts = await Post.find();
+        //.find(query, projection)
+        
+        /* 
+        0 for not showing and 1 for showing to users
+        by default _id will always be shown to users and if you dont want to show you should write _id:0 explicitly
+        */
+
+        // for showing name, value
+        const posts = await Post.find({},{name:1, value:1, _id:0});
+
         console.log(posts);
         res.json({
             message: posts
