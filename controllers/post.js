@@ -58,9 +58,14 @@ exports.getAllPosts = async(req,res,next) => {
         by default _id will always be shown to users and if you dont want to show you should write _id:0 explicitly
         */        
 
-        // passing query to find function -> finding all posts that have value 12
-        const posts = await Post.find({value:12},{});
+        // passing projection to find function -> showing only name,value to users
+        // const posts = await Post.find({},{name:1, value:1, _id:0});
 
+        // passing query to find function -> finding all posts that have value 12
+        //const posts = await Post.find({value:12},{});
+
+        //Find all posts 
+        const posts = await Post.find();
         console.log(posts);
         res.json({
             message: posts
