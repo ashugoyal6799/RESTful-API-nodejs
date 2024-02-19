@@ -1,0 +1,155 @@
+1. ERROR HANDLING AT THE END OF ROUTES  
+
+while writing routes we need to handle error that we call error handlers.
+in general if we hit any route that is not handled by our code it will give 404 not found error 
+having content-type as text/html but as we are writing REST Api's we want every data to be send 
+in JSON format so we should send the error message in JSON format.
+
+so after writing all the correct routes we can write a basic error handler route that take care of 
+all other invalid route like :
+app.use((req,res,next) => {
+    res.status(404); 
+    res.send({
+        "error" : "Not Found"
+    });
+});
+
+now if we hit any invalid url it will send the application/json data format with out json body.
+
+
+BUT THIS ABOVE METHOD IS NOT PROPER FOR ERROR HANDLING INSTEAD WE SHOULD 
+USE EXPRESS ERROR HANDLER FUNCTION.
+
+app.use((req,res,next) => {
+    const err = new ERROR('Not Found');
+    err.status=404;
+    next(err);
+});
+
+app.use((err,req,res,next) => {
+    res.status(err.status || 500); 
+    res.send({
+        error : {
+            status: err.status || 500,
+            message : err.message
+        }
+    });
+});
+
+
+
+--------------------------------------------------------------------------------------------------------
+
+2. HOW TO CONNECT WITH MONGODB ATLAS
+
+a. First login into mongodb atlas
+b. go to database access create a db user if not (copy password from there) , go to network access choose ip address a/c to your need.
+c. go to cluster then click on connect then click on connect with an application. Copy URI from it  (replace your password)
+d. now go to your app.js  
+
+const mongoose  = require('mongoose');
+
+const uri = "mongodb+srv://admin:cduwCc4W4MCDlQ8b@cluster0.xbjnz.mongodb.net/?retryWrites=true&w=majority/testDB"; 
+// copy your uri and add `/your_db_name` whatever you want
+// you can remove this part (`?retryWrites=true&w=majority`) from uri
+
+so uri will be now => 
+const uri = "mongodb+srv://admin:cduwCc4W4MCDlQ8b@cluster0.xbjnz.mongodb.net/testDB"
+
+mongoose.connect(uri).then(()=>{
+    console.log("MongoDB connected");
+})
+
+Now application will get connected with MongoDB Atlas.
+
+---------------------------------------------------------------------------------------------------------------------------------
+
+3. PARSING REQUEST
+
+a. QUERY STRING (req.query)
+
+http://localhost:3000/products?id=6&price=123
+
+here id=6 , price=123 is query string and stored in key-value pair
+
+to get the content of it in app.js
+app.use('/product', (req,res) => {
+    console.log(req.query.id) // for id , similarly do for price
+})
+
+b. ROUTE PARAMETERS (req.params)
+
+http://localhost:3000/products/6
+
+here 6 can be extracted in params
+
+to get the content of it in app.js
+app.use('/product/:id', (req,res) => {
+    console.log(req.params.id) // for getting id
+})
+
+
+c. REQUEST BODY (req.body)
+
+eg 1:
+POST at http://localhost:3000/products
+Content-Type : application/json
+
+{
+    "name":"Rohit",
+    "age: 30
+}
+
+eg2:
+POST at http://localhost:3000/products
+Content-Type : application/x-www-form-urlencoded
+
+name=Rohit&price=30
+
+
+something needs to be done to get the req.body, we have to use middleware that is ->
+app.use(express.json());
+but it will only parse the body when content type is application/json.
+
+so what to do for x-www-form-urlencoded ???
+app.use(express.urlencoded({extended:true}));
+
+
+------------------------------------------------------------------------------------------
+4. HOW TO MANAGE SECRETS/CONFIGS using DOTENV file.
+
+suppose to hide a DB password (lets call it admin1234)
+
+step1: npm install dotenv
+step2: add `require('dotenv').config();` at the top of index.js file
+step3: create a `.env`  file at the home directory 
+step4: put all the secrets in this .env file as key-value pair 
+like: 
+
+DB_PASSWORD=admin1234
+
+Note: dont give any unnecassary space in this file
+
+then use admin1234 anywhere in the project as `process.env.DB_PASSWORD` 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
