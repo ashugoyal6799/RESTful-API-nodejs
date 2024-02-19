@@ -46,3 +46,21 @@ exports.createPost = async(req,res,next) => {
         });
     }
 }
+
+
+// To get all the posts 
+exports.getAllPosts = async(req,res,next) => {
+    try{
+        const posts = await Post.find();
+        console.log(posts);
+        res.json({
+            message: posts
+        })
+    }
+    catch(err) {
+        res.status(500).json({
+            message:'Error'
+        })
+    }
+    
+};
