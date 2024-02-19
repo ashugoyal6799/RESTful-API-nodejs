@@ -13,6 +13,8 @@ router.post('/',postController.createPost);
 // Get a post by the id
 router.get('/:id',postController.getPostByID);
 
+// Update a post by id
+router.patch('/:id',postController.updatePostByID);
 
 // Delete a post by id
 router.delete('/:id',postController.deletePostByID);

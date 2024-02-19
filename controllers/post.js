@@ -116,3 +116,31 @@ exports.deletePostByID = async(req,res,next) =>{
         })
     }
 }
+
+
+// Update a post by id
+exports.updatePostByID  = async(req,res,next) =>{
+    
+    try{
+        const updates = req.body;
+        const id = req.params.id;
+
+        // it will return old document
+        // const post = await Post.findByIdAndUpdate(id,updates); 
+        
+        // To get the updated document -> we need to pass options parameter in findByIdAndUpdate
+        const options = {new:true};
+        const post = await Post.findByIdAndUpdate(id,updates,options); // it will return old document
+
+        res.json({
+            message:post
+        })
+    }
+    catch(err) {
+        res.status(500).json({
+            message:'Server Error'
+        })
+    }
+
+
+}
