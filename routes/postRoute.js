@@ -2,15 +2,18 @@ const express = require('express');
 const router = express.Router();
 const postController = require('../controllers/post');
 
-// getting all the posts
+// Get all the posts
 router.get('/', postController.getAllPosts);
 
 
-// creating a new post
+// Creating a new post
 router.post('/',postController.createPost);
 
 
-// getting post from the id
+// Get a post by the id
 router.get('/:id',postController.getPostByID);
 
+
+// Delete a post by id
+router.delete('/:id',postController.deletePostByID);
 module.exports = router;

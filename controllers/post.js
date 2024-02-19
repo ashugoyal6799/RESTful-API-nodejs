@@ -48,7 +48,7 @@ exports.createPost = async(req,res,next) => {
 }
 
 
-// To get all the posts 
+// Get all the posts 
 exports.getAllPosts = async(req,res,next) => {
     try{
         //.find(query, projection)
@@ -79,7 +79,7 @@ exports.getAllPosts = async(req,res,next) => {
     
 };
 
-// Get post by the ID
+// Get a post by the ID
 exports.getPostByID = async(req,res,next) => {
     try{
         const post = await Post.findById(req.params.id);
@@ -97,6 +97,22 @@ exports.getPostByID = async(req,res,next) => {
     catch(err) {
         res.status(500).json({
             message: `Sever Error`
+        })
+    }
+}
+
+
+// Delete a post by ID
+exports.deletePostByID = async(req,res,next) =>{
+    try{
+        const post = await Post.findByIdAndDelete(req.params.id);
+        res.json({
+            message: post
+        })
+    }
+    catch(err) {
+        res.status(500).json({
+            message: 'Server Error'
         })
     }
 }
