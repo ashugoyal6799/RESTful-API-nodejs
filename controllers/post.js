@@ -78,3 +78,25 @@ exports.getAllPosts = async(req,res,next) => {
     }
     
 };
+
+// Get post by the ID
+exports.getPostByID = async(req,res,next) => {
+    try{
+        const post = await Post.findById(req.params.id);
+        // const post = await Post.find({_id:req.params.id}); // it will also work
+        
+        /*The findOne() method finds and returns one document that matches the given selection criteria. 
+        If multiple documents satisfy the given query expression, then this method will return the 
+        first document according to the natural order which reflects the order of documents on the disk */
+        // const post = await Post.findOne({_id:req.params.id});
+
+        res.json({
+            message: post
+        })
+    }
+    catch(err) {
+        res.status(500).json({
+            message: `Sever Error`
+        })
+    }
+}
