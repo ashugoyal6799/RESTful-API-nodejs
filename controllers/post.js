@@ -1,7 +1,7 @@
 const express = require('express');
 const Post = require('../models/Post.model')
 
-
+/*
 // Creating a new Post and Saving using Promise
 exports.createPost = (req,res,next) => {
     console.log(req.body);
@@ -27,4 +27,22 @@ exports.createPost = (req,res,next) => {
                 message: 'Post Not Created'
             });
         })
+}
+*/
+
+// Creating a new Post and Saving using Async-Await
+exports.createPost = async(req,res,next) => {
+    try{
+        const post = new Post(req.body);
+        const result = await post.save();
+        res.json({
+            message: 'Post Created'
+        });
+    }
+    catch(err){
+        console.log(err);
+        res.status(500).json({
+            message: 'Post Not Created'
+        });
+    }
 }
